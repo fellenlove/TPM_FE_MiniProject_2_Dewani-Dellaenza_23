@@ -1,0 +1,138 @@
+/* GLOBAL */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  background: #DBF0FD;
+}
+
+.container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 240px;
+  background: #7ACCFF;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.logo {
+  color: #fff;
+  font-size: 24px;
+  margin-bottom: 32px;
+}
+
+.menu a,
+.menu-bottom a {
+  display: block;
+  padding: 12px;
+  margin-bottom: 8px;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.menu a.active {
+  background: #4986DB;
+}
+
+/* CONTENT */
+.content {
+  flex: 1;
+  padding: 32px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+h2 {
+  font-size: 32px;
+  color: #4986DB;
+}
+
+.btn {
+  background: #4986DB;
+  color: #fff;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* PRODUCTS */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.card h3 {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.card p {
+  font-size: 14px;
+  color: #4B5563;
+  margin-bottom: 6px;
+}
+
+.card .actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.card .actions span {
+  cursor: pointer;
+}
+
+/* FORM */
+.form {
+  max-width: 600px;
+  background: #fff;
+  padding: 24px;
+  border-radius: 16px;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+label {
+  font-size: 20px;
+  display: block;
+  margin-bottom: 6px;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}
+
+.hidden { display: none; }
