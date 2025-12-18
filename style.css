@@ -11,6 +11,7 @@ body {
 }
 
 .container {
+  display: flex;
   min-height: 100vh;
 }
 
@@ -19,17 +20,10 @@ body {
   width: 240px;
   background: #7ACCFF;
   padding: 24px;
-
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100vh;
-
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
-
 
 .logo {
   color: #fff;
@@ -55,10 +49,9 @@ body {
 
 /* CONTENT */
 .content {
+  flex: 1;
   padding: 32px;
-  margin-left: 240px;
 }
-
 
 .header {
   display: flex;
