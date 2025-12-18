@@ -1,95 +1,129 @@
-let products = [
-  {
-    id: 1,
-    name: 'Wireless Earbuds',
-    category: 'Electronics',
-    price: 'Rp. 799.000',
-    desc: 'Compact wireless earbuds delivering crisp audio and seamless Bluetooth connectivity.'
-  },
-  {
-    id: 2,
-    name: 'Yoga Mat',
-    category: 'Fitness',
-    price: 'Rp. 340.000',
-    desc: 'Durable, non-slip yoga mat designed for stability and comfort.'
-  }
-];
-
+const API_URL = "https://fakestoreapi.com/products";
 let editId = null;
 
-function renderProducts() {
-  const list = document.getElementById('productList');
-  list.innerHTML = '';
+// ================= ELEMENT =================
+const productsPage = document.getElementById("productsPage");
+const formPage = document.getElementById("formPage");
+const formTitle = document.getElementById("formTitle");
 
-  products.forEach(p => {
-    list.innerHTML += `
-      <div class="card">
-        <h3>${p.name}</h3>
-        <p><b>Category:</b> ${p.category}</p>
-        <p><b>Price:</b> ${p.price}</p>
-        <p>${p.desc}</p>
-        <div class="actions">
-          <span onclick="editProduct(${p.id})">✏️</span>
-          <span onclick="deleteProduct(${p.id})">🗑️</span>
+const nameInput = document.getElementById("name");
+const categoryInput = document.getElementById("category");
+const priceInput = document.getElementById("price");
+const descInput = document.getElementById("desc");
+
+// ================= READ =================
+async function renderProducts() {
+  const list = document.getElementById("productList");
+  list.innerHTML = "Loading...";
+
+  try {
+    const res = await fetch(API_URL);
+    const products = await res.json();
+
+    list.innerHTML = "";
+    products.forEach(p => {
+      list.innerHTML += `
+        <div class="card">
+          <h3>${p.title}</h3>
+          <p><b>Category:</b> ${p.category}</p>
+          <p><b>Price:</b> $${p.price}</p>
+          <p>${p.description}</p>
+          <div class="actions">
+            <span onclick="editProduct(${p.id})">✏️</span>
+            <span onclick="deleteProduct(${p.id})">🗑️</span>
+          </div>
         </div>
-      </div>
-    `;
-  });
+      `;
+    });
+  } catch (error) {
+    list.innerHTML = "Failed to load products";
+    console.error(error);
+  }
 }
 
+// ================= ADD =================
 function openAddForm() {
   editId = null;
-  document.getElementById('formTitle').innerText = 'Add Product';
-  document.getElementById('productsPage').classList.add('hidden');
-  document.getElementById('formPage').classList.remove('hidden');
+  formTitle.innerText = "Add Product";
+  productsPage.classList.add("hidden");
+  formPage.classList.remove("hidden");
   clearForm();
 }
 
-function editProduct(id) {
-  const p = products.find(item => item.id === id);
+// ================= EDIT =================
+async function editProduct(id) {
   editId = id;
 
-  name.value = p.name;
-  category.value = p.category;
-  price.value = p.price.replace(/[^0-9]/g, '');
-  desc.value = p.desc;
+  const res = await fetch(`${API_URL}/${id}`);
+  const p = await res.json();
 
-  document.getElementById('formTitle').innerText = 'Update Product';
-  document.getElementById('productsPage').classList.add('hidden');
-  document.getElementById('formPage').classList.remove('hidden');
+  nameInput.value = p.title;
+  categoryInput.value = p.category;
+  priceInput.value = p.price;
+  descInput.value = p.description;
+
+  formTitle.innerText = "Update Product";
+  productsPage.classList.add("hidden");
+  formPage.classList.remove("hidden");
 }
 
-function saveProduct() {
+// ================= SAVE =================
+async function saveProduct() {
   const data = {
-    name: name.value,
-    category: category.value,
-    price: 'Rp. ' + price.value,
-    desc: desc.value
+    title: nameInput.value,
+    price: Number(priceInput.value),
+    description: descInput.value,
+    category: categoryInput.value,
+    image: "https://i.pravatar.cc"
   };
 
-  if (editId) {
-    const index = products.findIndex(p => p.id === editId);
-    products[index] = { ...products[index], ...data };
-  } else {
-    products.push({ id: Date.now(), ...data });
+  try {
+    if (editId) {
+      await fetch(`${API_URL}/${editId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+    } else {
+      await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+    }
+
+    showProducts();
+  } catch (error) {
+    console.error("Save error:", error);
   }
-
-  showProducts();
 }
 
-function deleteProduct(id) {
-  products = products.filter(p => p.id !== id);
-  renderProducts();
+// ================= DELETE =================
+async function deleteProduct(id) {
+  try {
+    await fetch(`${API_URL}/${id}`, {
+      method: "DELETE"
+    });
+    renderProducts();
+  } catch (error) {
+    console.error("Delete error:", error);
+  }
 }
 
+// ================= NAV =================
 function showProducts() {
-  document.getElementById('formPage').classList.add('hidden');
-  document.getElementById('productsPage').classList.remove('hidden');
+  formPage.classList.add("hidden");
+  productsPage.classList.remove("hidden");
   renderProducts();
 }
 
+// ================= UTIL =================
 function clearForm() {
-  name.value = category.value = price.value = desc.value = '';
+  nameInput.value = "";
+  categoryInput.value = "";
+  priceInput.value = "";
+  descInput.value = "";
 }
 
+// ================= INIT =================
 renderProducts();
